@@ -16,28 +16,28 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/exam/java")
 public class JavaController {
-    private final QuestionService service;
+    private final QuestionService questionService;
 
     @Autowired
-    public JavaController(@Qualifier("java") QuestionService service) {
-        this.service = service;
+    public JavaController(@Qualifier("java") QuestionService questionService) {
+        this.questionService = questionService;
     }
 
 
     @GetMapping("/add")
     public Question add(@RequestParam String question, @RequestParam String answer) {
-        return service.add(question, answer);
+        return questionService.add(question, answer);
     }
 
 
     @GetMapping("/remove")
     public Question remove(@RequestParam String question, @RequestParam String answer) {
-        return service.remove(question, answer);
+        return questionService.remove(question, answer);
     }
 
 
     @GetMapping
     public Collection<Question> get() {
-        return service.getAllQuestions();
+        return questionService.getAllQuestions();
     }
 }

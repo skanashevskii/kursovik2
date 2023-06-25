@@ -12,7 +12,7 @@ import java.util.*;
 @Service
 
 public class ExaminerServiceImpl implements ExaminerService{
-    private Random random ;
+    private final Random random ;
     private final QuestionService javaQuestionService;
     private final QuestionService mathQuestionService;
 

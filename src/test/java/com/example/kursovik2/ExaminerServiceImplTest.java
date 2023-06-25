@@ -7,24 +7,46 @@ import com.example.kursovik2.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class ExaminerServiceImplTest {
-    private ExaminerServiceImpl examinerService;
-    private QuestionService questionService;
+    @Mock
+    @Qualifier("javaQuestionService")
 
-    @BeforeEach
+    private QuestionService javaQuestionService;
+    @Mock
+    @Qualifier("mathQuestionService")
+    private QuestionService mathQuestionService;
+    @InjectMocks
+    private ExaminerServiceImpl examinerService;
+
+  /*  @BeforeEach
     void setUp() {
-        questionService = mock(QuestionService.class);
-        examinerService = new ExaminerServiceImpl(questionService);
+        MockitoAnnotations.initMocks(this);
+    }*/
+    @Test
+    void getQuestions_ShouldReturnRandomQuestionsFromBothServices() {
+        // Настройка моков для возврата случайных вопросов
+        when(javaQuestionService.getRandomQuestion()).thenReturn(new Question("Java Question 1", "Answer 1"));
+        when(mathQuestionService.getRandomQuestion()).thenReturn(new Question("Math Question 1", "Answer 1"));
+
+        List<Question> questions = examinerService.getRandomQuestions(1,1);
+        // Проверка, что возвращены случайные вопросы из обоих сервисов
+        assertThat(questions.size()).isEqualTo(2);
     }
 
     @Test
@@ -33,11 +55,11 @@ class ExaminerServiceImplTest {
         Question question1 = new Question("Question 1", "Answer 1");
         Question question2 = new Question("Question 2", "Answer 2");
         Question question3 = new Question("Question 3", "Answer 3");
-        when(questionService.getAll()).thenReturn(Arrays.asList(question1, question2, question3));
-        when(questionService.getRandomQuestion()).thenReturn(question1, question2, question3);
+        when(examinerService.getRandomQuestions(1,1)).thenReturn(Arrays.asList(question1, question2, question3));
+
 
         int amount = 2;
-        Collection<Question> questions = examinerService.getQuestions(amount);
+        Collection<Question> questions = examinerService.getAllQuestions(amount);
 
         assertEquals(amount, questions.size());
         assertTrue(questions.contains(question1));
@@ -48,9 +70,9 @@ class ExaminerServiceImplTest {
     @Test
     void testGetQuestionsWithInvalidAmount() {
 
-        when(questionService.getAll()).thenReturn(Arrays.asList(new Question("Question 1", "Answer 1")));
+        when(javaQuestionService.getAllQuestions()).thenReturn(List.of(new Question("Question 1", "Answer 1")));
 
         int amount = 2;
-        assertThrows(BadRequestException.class, () -> examinerService.getQuestions(amount));
+        assertThrows(BadRequestException.class, () -> examinerService.getAllQuestions(amount));
     }
 }

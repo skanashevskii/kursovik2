@@ -2,17 +2,21 @@ package com.example.kursovik2.repository;
 
 import com.example.kursovik2.model.Question;
 import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
-
+@Qualifier("mathQuestionRepository")
 public class MathQuestionRepository implements QuestionRepository {
-    private final Set<Question> questions = new HashSet<>();
+    private final Set<Question> questions;
 
-    @PostConstruct
+    public MathQuestionRepository() {
+        this.questions = new HashSet<>();
+    }
+
+/*    @PostConstruct
     public void init() {
         Question question1 = new Question("2+2=?", "4");
         Question question2 = new Question("2*5=?", "10");
@@ -22,7 +26,7 @@ public class MathQuestionRepository implements QuestionRepository {
         add(question2);
         add(question3);
         add(question4);
-    }
+    }*/
 
     @Override
     public void add(Question question) {

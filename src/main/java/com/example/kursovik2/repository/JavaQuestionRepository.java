@@ -3,18 +3,21 @@ package com.example.kursovik2.repository;
 import com.example.kursovik2.model.Question;
 
 import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
-
+@Qualifier("javaQuestionRepository")
 public class JavaQuestionRepository implements QuestionRepository {
-    private final Set<Question> questions = new HashSet<>();
+    private final Set<Question> questions;
 
-    //JavaQuestionRepository(){}
-    @PostConstruct
+    public JavaQuestionRepository() {
+        questions = new HashSet<>();
+    }
+
+  /*  @PostConstruct
     public void init() {
         Question question1 = new Question("Где?", "Везде");
         Question question2 = new Question("Почему?", "Потому");
@@ -24,7 +27,7 @@ public class JavaQuestionRepository implements QuestionRepository {
         add(question2);
         add(question3);
         add(question4);
-    }
+    }*/
 
     @Override
     public void add(Question question) {

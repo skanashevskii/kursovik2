@@ -4,6 +4,7 @@ import com.example.kursovik2.model.Question;
 import com.example.kursovik2.service.ExaminerService;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.Collection;
 public class ExamController {
 
     private final ExaminerService examinerService;
-
+    @Autowired
     public ExamController(ExaminerService examinerService) {
 
         this.examinerService = examinerService;
