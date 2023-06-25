@@ -5,5 +5,5 @@ import com.example.kursovik2.model.Question;
 import java.util.Collection;
 
 public interface ExaminerService {
-     Collection<Question> getQuestions(int amount);
+     Collection<Question> getAllQuestions(int amount);
 }

@@ -2,7 +2,6 @@ package com.example.kursovik2.controllers;
 
 import com.example.kursovik2.model.Question;
 import com.example.kursovik2.service.QuestionService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,32 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-
 @RestController
-@RequestMapping("/exam/java")
-public class JavaController {
-    private final QuestionService service;
+@RequestMapping("/exam/math")
+public class MathQuestionController {
+    private final QuestionService questionService;
 
     @Autowired
-    public JavaController(@Qualifier("java") QuestionService service) {
-        this.service = service;
+    public MathQuestionController(@Qualifier("math") QuestionService questionService) {
+        this.questionService = questionService;
     }
-
 
     @GetMapping("/add")
     public Question add(@RequestParam String question, @RequestParam String answer) {
-        return service.add(question, answer);
+        return questionService.add(question, answer);
     }
-
 
     @GetMapping("/remove")
     public Question remove(@RequestParam String question, @RequestParam String answer) {
-        return service.remove(question, answer);
+        return questionService.remove(question, answer);
     }
 
-
     @GetMapping
-    public Collection<Question> get() {
-        return service.getAllQuestions();
+    public Collection<Question> getAllQuestions() {
+        return questionService.getAllQuestions();
     }
 }
