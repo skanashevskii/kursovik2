@@ -14,7 +14,7 @@ import java.util.Collection;
 public class ExamController {
 
     private final ExaminerService examinerService;
-    @Autowired
+
     public ExamController(ExaminerService examinerService) {
 
         this.examinerService = examinerService;
@@ -23,7 +23,7 @@ public class ExamController {
     @GetMapping("/get/{amount}")
 
     public Collection<Question> getQuestions(@PathVariable int amount) {
-        return examinerService.getAllQuestions(amount);
+        return examinerService.getQuestions(amount);
     }
 
 }

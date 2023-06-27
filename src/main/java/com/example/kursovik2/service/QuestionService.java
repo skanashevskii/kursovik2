@@ -7,8 +7,8 @@ import java.util.Collection;
 
 
 public interface QuestionService {
-    Question add(String question, String answer);
-    Question remove(String question, String answer);
+    void addQuestion(Question question);
+    void removeQuestion(Question question);
    Collection<Question> getAllQuestions();
    Question getRandomQuestion();
 

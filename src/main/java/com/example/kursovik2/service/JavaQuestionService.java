@@ -2,46 +2,50 @@ package com.example.kursovik2.service;
 
 import com.example.kursovik2.model.Question;
 
+import com.example.kursovik2.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-@Qualifier("java")
+@Qualifier("javaQuestionService")
 public class JavaQuestionService implements QuestionService {
-    private List<Question> questions;
+   private final QuestionRepository questionRepository;
 
-    public JavaQuestionService() {
-        questions = new ArrayList<>();
+    public JavaQuestionService(@Qualifier("javaQuestionRepository")QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
     @Override
-    public Question add(String question, String answer) {
-        Question quest = new Question(question, answer);
-        questions.add(quest);
-        return quest;
+    public void addQuestion(Question question) {
+        questionRepository.add(question);
     }
 
     @Override
-    public Question remove(String question, String answer) {
-        Question quest = new Question(question, answer);
-        questions.remove(quest);
-        return quest;
+    public void removeQuestion(Question question) {
+      questionRepository.remove(question);
     }
 
-    public List<Question> getAllQuestions() {
-        return Collections.unmodifiableList(questions);
+    public Collection<Question> getAllQuestions() {
+        return Collections.unmodifiableCollection(questionRepository.getAll());
 
     }
 
     @Override
     public Question getRandomQuestion() {
+        Collection<Question> questions = questionRepository.getAll();
+        Random random = new Random();
         if (questions.isEmpty()){
-            return null;
+            throw new RuntimeException("No question!");
         }
-        int maxIndex = questions.size();
-        int randomIndex = (int)(Math.random()*maxIndex);
-        return questions.get(randomIndex);
+        int randomIndex = random.nextInt(questions.size());
+        Iterator<Question> iterator = questions.iterator();
+        // Перебираем элементы коллекции до нужного индекса
+        for (int i = 0; i < randomIndex; i++) {
+            iterator.next();
+        }
+        // Возвращаем вопрос по указанному индексу
+        return iterator.next();
     }
 }

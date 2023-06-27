@@ -8,5 +8,5 @@ import java.util.List;
 public interface QuestionRepository {
     void add(Question question);
     void remove(Question question);
-    Collection<Question> getAllQuestions();
+    Collection<Question> getAll();
 }

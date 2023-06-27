@@ -1,71 +1,87 @@
 package com.example.kursovik2;
-
 import com.example.kursovik2.model.Question;
 import com.example.kursovik2.repository.QuestionRepository;
 import com.example.kursovik2.service.MathQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class MathQuestionServiceTest {
+    private MathQuestionService mathQuestionService;
 
     @Mock
     private QuestionRepository questionRepository;
 
-    @InjectMocks
-    private MathQuestionService mathQuestionService;
-
     @BeforeEach
     void setUp() {
-
+        MockitoAnnotations.openMocks(this);
+        mathQuestionService = new MathQuestionService(questionRepository);
     }
 
     @Test
-    void testAddQuestion() {
-        Question question = mathQuestionService.add("What is 2 + 2?", "4");
+    void addQuestion() {
+        Question question = new Question("Question", "Answer");
 
-        assertNotNull(question);
-        assertEquals("What is 2 + 2?", question.getQuestion());
-        assertEquals("4", question.getAnswer());
-        assertTrue(mathQuestionService.getAllQuestions().contains(question));
+        mathQuestionService.addQuestion(question);
+
+        verify(questionRepository, times(1)).add(question);
     }
 
     @Test
-    void testRemoveQuestion() {
-        Question question = mathQuestionService.add("2+2", "4");
-        mathQuestionService.remove("2+2", "4");
-        assertNotNull(question);
-        assertFalse(mathQuestionService.getAllQuestions().contains(question));
+    void removeQuestion() {
+        Question question = new Question("Question", "Answer");
+
+        mathQuestionService.removeQuestion(question);
+
+        verify(questionRepository, times(1)).remove(question);
     }
 
     @Test
-    void testGetAllQuestions() {
+    void getAllQuestions() {
+        List<Question> expectedQuestions = new ArrayList<>();
+        expectedQuestions.add(new Question("Question 1", "Answer 1"));
+        expectedQuestions.add(new Question("Question 2", "Answer 2"));
 
-        Question question1 = mathQuestionService.add("What is 2 + 2?", "4");
-        Question question2 = mathQuestionService.add("What is 3 * 4?", "12");
+        when(questionRepository.getAll()).thenReturn(expectedQuestions);
 
-        assertEquals(2, mathQuestionService.getAllQuestions().size());
-        assertTrue(mathQuestionService.getAllQuestions().contains(question1));
-        assertTrue(mathQuestionService.getAllQuestions().contains(question2));
-        //verify(questionRepository, times(1)).getAllQuestions();
+        Collection<Question> actualQuestions = mathQuestionService.getAllQuestions();
 
+        assertEquals(expectedQuestions.size(), actualQuestions.size());
+        assertTrue(actualQuestions.containsAll(expectedQuestions));
     }
 
     @Test
-    void testGetRandomQuestion() {
-        Question question1 = mathQuestionService.add("What is 2 + 2?", "4");
-        Question question2 = mathQuestionService.add("What is 3 * 4?", "12");
+    void getRandomQuestion() {
+        List<Question> questions = new ArrayList<>();
+        questions.add(new Question("Question 1", "Answer 1"));
+        questions.add(new Question("Question 2", "Answer 2"));
 
-        Question randomQuestion = mathQuestionService.getRandomQuestion();
-        assertTrue(mathQuestionService.getAllQuestions().contains(randomQuestion));
+        when(questionRepository.getAll()).thenReturn(questions);
 
-        //verify(mathQuestionService, times(1)).getAllQuestions();
+        try {
+            Question randomQuestion = mathQuestionService.getRandomQuestion();
+            assertTrue(questions.contains(randomQuestion));
+        } catch (RuntimeException e) {
+            fail("No question should throw an exception.");
+        }
+    }
+
+    @Test
+    void getRandomQuestion_NoQuestionsAvailable() {
+        when(questionRepository.getAll()).thenReturn(new ArrayList<>());
+
+        assertThrows(RuntimeException.class, () -> {
+            mathQuestionService.getRandomQuestion();
+        });
     }
 }

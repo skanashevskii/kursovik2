@@ -17,18 +17,20 @@ public class MathQuestionController {
     private final QuestionService questionService;
 
     @Autowired
-    public MathQuestionController(@Qualifier("math") QuestionService questionService) {
+    public MathQuestionController(@Qualifier("mathQuestionService") QuestionService questionService) {
         this.questionService = questionService;
     }
 
     @GetMapping("/add")
-    public Question add(@RequestParam String question, @RequestParam String answer) {
-        return questionService.add(question, answer);
+    public void addQuestion(@RequestParam String question, @RequestParam String answer) {
+        Question newQuestion = new Question(question,answer);
+        questionService.addQuestion(newQuestion);
     }
 
     @GetMapping("/remove")
-    public Question remove(@RequestParam String question, @RequestParam String answer) {
-        return questionService.remove(question, answer);
+    public void remove(@RequestParam String question, @RequestParam String answer) {
+        Question existingQuestion = new Question(question,answer);
+        questionService.removeQuestion(existingQuestion);
     }
 
     @GetMapping
