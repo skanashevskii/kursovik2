@@ -1,7 +1,7 @@
 package com.example.kursovik2.service;
 
 import com.example.kursovik2.model.Question;
-import com.example.kursovik2.repository.MathQuestionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,8 @@ import java.util.*;
 public class MathQuestionService implements QuestionService {
     private final List<Question> questions;
 
-    @Autowired
-    public MathQuestionService(List<Question> questions) {
-        this.questions =questions;
+    public MathQuestionService() {
+        questions =new ArrayList<>();
     }
 
 
@@ -29,19 +28,24 @@ public class MathQuestionService implements QuestionService {
     @Override
     public Question remove(String question, String answer) {
         Question quest = new Question(question, answer);
-        questions.removeIf(q -> q.getQuestion().equals(quest));
+        questions.remove(quest);
         return quest;
     }
 
-    public Collection<Question> getAllQuestions() {
-        return Collections.unmodifiableCollection(questions);
+    public List<Question> getAllQuestions() {
+        return Collections.unmodifiableList(questions);
 
     }
     @Override
     public Question getRandomQuestion() {
+        if (questions.isEmpty()) {
+            return null;
+        }
+
         int maxIndex = questions.size();
         int randomIndex = (int) (Math.random() * maxIndex);
         return questions.get(randomIndex);
+
     }
 }
 

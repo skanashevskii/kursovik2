@@ -12,8 +12,8 @@ import java.util.*;
 public class JavaQuestionService implements QuestionService {
     private List<Question> questions;
 
-    public JavaQuestionService(List<Question> questions) {
-        this.questions = questions;
+    public JavaQuestionService() {
+        questions = new ArrayList<>();
     }
 
     @Override

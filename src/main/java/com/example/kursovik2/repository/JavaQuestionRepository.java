@@ -5,10 +5,11 @@ import com.example.kursovik2.model.Question;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Repository
+@Service
 @Qualifier("javaQuestionRepository")
 public class JavaQuestionRepository implements QuestionRepository {
     private final Set<Question> questions;
@@ -16,18 +17,6 @@ public class JavaQuestionRepository implements QuestionRepository {
     public JavaQuestionRepository() {
         questions = new HashSet<>();
     }
-
-  /*  @PostConstruct
-    public void init() {
-        Question question1 = new Question("Где?", "Везде");
-        Question question2 = new Question("Почему?", "Потому");
-        Question question3 = new Question("Сколько?", "Много");
-        Question question4 = new Question("Как?", "Молча");
-        add(question1);
-        add(question2);
-        add(question3);
-        add(question4);
-    }*/
 
     @Override
     public void add(Question question) {
@@ -40,7 +29,7 @@ public class JavaQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public List<Question> getAllQuestions() {
-        return List.copyOf(questions);
+    public Collection<Question> getAllQuestions() {
+        return Collections.unmodifiableCollection(questions);
     }
 }

@@ -4,10 +4,11 @@ import com.example.kursovik2.model.Question;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Repository
+@Service
 @Qualifier("mathQuestionRepository")
 public class MathQuestionRepository implements QuestionRepository {
     private final Set<Question> questions;
@@ -39,7 +40,7 @@ public class MathQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public List<Question> getAllQuestions() {
-        return List.copyOf(questions);
+    public Collection<Question> getAllQuestions() {
+        return Collections.unmodifiableCollection(questions);
     }
 }
