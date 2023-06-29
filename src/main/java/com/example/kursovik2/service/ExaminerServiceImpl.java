@@ -26,8 +26,8 @@ public class ExaminerServiceImpl implements ExaminerService{
     public Collection<Question> getQuestions(int amount) {
         Collection<Question> questions = new ArrayList<>();
 
-        Collection<Question> javaQuestions = javaQuestionService.getAllQuestions();
-        Collection<Question> mathQuestions = mathQuestionService.getAllQuestions();
+        Collection<Question> javaQuestions = new ArrayList<>(javaQuestionService.getAllQuestions());
+        Collection<Question> mathQuestions = new ArrayList<>(mathQuestionService.getAllQuestions());
 
         if (javaQuestions.size() + mathQuestions.size() < amount) {
             throw new BadRequestException("Not enough questions available.");
