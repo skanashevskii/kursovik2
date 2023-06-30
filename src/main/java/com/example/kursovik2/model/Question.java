@@ -22,9 +22,9 @@ public class Question {
         return answer;
     }
 
-  /*  public String question(){
+    public String question(){
         return this.question + this.answer;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {
