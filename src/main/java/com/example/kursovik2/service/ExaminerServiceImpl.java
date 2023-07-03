@@ -10,7 +10,7 @@ import java.util.*;
 
 @Service
 
-public class ExaminerServiceImpl implements ExaminerService{
+public class ExaminerServiceImpl implements ExaminerService {
     private final QuestionService javaQuestionService;
     private final QuestionService mathQuestionService;
 
@@ -22,6 +22,7 @@ public class ExaminerServiceImpl implements ExaminerService{
         this.mathQuestionService = mathQuestionService;
 
     }
+
     @Override
     public Collection<Question> getQuestions(int amount) {
         Collection<Question> questions = new ArrayList<>();
@@ -61,6 +62,5 @@ public class ExaminerServiceImpl implements ExaminerService{
 
         return Collections.unmodifiableCollection(questions);
     }
-
 
 }
