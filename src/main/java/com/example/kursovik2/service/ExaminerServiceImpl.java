@@ -26,6 +26,37 @@ public class ExaminerServiceImpl implements ExaminerService {
 
     }
 
+    /**
+     * Данный метод getQuestions(int amount) возвращает коллекцию случайных вопросов.
+     * Вот объяснение его логики работы:
+     *
+     * Создается пустая коллекция questions, которая будет содержать выбранные случайные вопросы.
+     * Вычисляется общее количество доступных вопросов путем сложения количества вопросов
+     * из javaQuestionService и mathQuestionService.
+     * Если оба javaQuestionService и mathQuestionService не содержат вопросов
+     * (т.е., их списки вопросов пусты), генерируется исключение ServiceException с сообщением
+     * "Сборник вопросов пустой!".
+     * Если общее количество доступных вопросов меньше, чем требуемое amount, генерируется
+     * исключение BadRequestException с сообщением "Не достаточно вопросов в сборнике!".
+     * Создается список questionServices, в который добавляются javaQuestionService и
+     * mathQuestionService, если они содержат вопросы.
+     * Инициализируется генератор случайных чисел random (рандомизатор) с использованием
+     * ThreadLocalRandom, который будет использоваться для выбора случайного индекса в списке
+     * questionServices.
+     * Запускается цикл, который продолжается до тех пор, пока коллекция questions не достигнет
+     * требуемого количества amount вопросов.
+     * В каждой итерации цикла генерируется случайное число nextInt, которое представляет индекс
+     * случайно выбранного элемента из questionServices.
+     * Используя индекс nextInt, выбирается случайный QuestionService из списка questionServices.
+     * Выбирается случайный вопрос (randomQuestion) из выбранного QuestionService.
+     * Выбранный вопрос добавляется в коллекцию questions.
+     * Когда количество вопросов в коллекции questions достигает amount, цикл завершается.
+     * Возвращается неизменяемая коллекция questions с выбранными случайными вопросами.
+     * @param amount
+     * @return
+     * @throws BadRequestException
+     * @throws ServiceException
+     */
     @Override
     public Collection<Question> getQuestions(int amount) throws BadRequestException,ServiceException{
         Collection<Question> questions = new HashSet<>();
@@ -36,8 +67,6 @@ public class ExaminerServiceImpl implements ExaminerService {
         if (availableQuestions < amount) {
             throw new BadRequestException("Не достаточно вопросов в сборнике!");
         }
-
-
         List<QuestionService> questionServices = new ArrayList<>();
 
         if (!javaQuestionService.getAllQuestions().isEmpty()) {
