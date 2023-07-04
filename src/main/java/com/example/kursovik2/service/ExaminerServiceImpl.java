@@ -1,12 +1,15 @@
 package com.example.kursovik2.service;
 
 import com.example.kursovik2.exception.BadRequestException;
+import com.example.kursovik2.exception.ServiceException;
 import com.example.kursovik2.model.Question;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.management.ServiceNotFoundException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 
@@ -24,6 +27,40 @@ public class ExaminerServiceImpl implements ExaminerService {
     }
 
     @Override
+    public Collection<Question> getQuestions(int amount) throws BadRequestException,ServiceException{
+        Collection<Question> questions = new HashSet<>();
+        int availableQuestions = javaQuestionService.getAllQuestions().size() + mathQuestionService.getAllQuestions().size();
+        if (javaQuestionService.getAllQuestions().isEmpty() && mathQuestionService.getAllQuestions().isEmpty()) {
+            throw new ServiceException("Сборник вопросов пустой!");
+        }
+        if (availableQuestions < amount) {
+            throw new BadRequestException("Не достаточно вопросов в сборнике!");
+        }
+
+
+        List<QuestionService> questionServices = new ArrayList<>();
+
+        if (!javaQuestionService.getAllQuestions().isEmpty()) {
+            questionServices.add(javaQuestionService);
+        }
+        if (!mathQuestionService.getAllQuestions().isEmpty()) {
+            questionServices.add(mathQuestionService);
+        }
+        //Random random = new Random();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        while (questions.size() < amount) {
+            int nextInt = random.nextInt(questionServices.size());
+            QuestionService randomService = questionServices.get(nextInt);
+            Question randomQuestion = randomService.getRandomQuestion();
+            questions.add(randomQuestion);
+        }
+
+        return Collections.unmodifiableCollection(questions);
+    }
+}
+
+  /*  @Override
     public Collection<Question> getQuestions(int amount) {
         Collection<Question> questions = new ArrayList<>();
 
@@ -61,6 +98,6 @@ public class ExaminerServiceImpl implements ExaminerService {
         }
 
         return Collections.unmodifiableCollection(questions);
-    }
+    }*/
 
-}
+
