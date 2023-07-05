@@ -22,15 +22,17 @@ public class MathQuestionController {
     }
 
     @GetMapping("/add")
-    public void addQuestion(@RequestParam String question, @RequestParam String answer) {
+    public Question addQuestion(@RequestParam String question, @RequestParam String answer) {
         Question newQuestion = new Question(question,answer);
         questionService.addQuestion(newQuestion);
+        return newQuestion;
     }
 
     @GetMapping("/remove")
-    public void remove(@RequestParam String question, @RequestParam String answer) {
+    public Question remove(@RequestParam String question, @RequestParam String answer) {
         Question existingQuestion = new Question(question,answer);
         questionService.removeQuestion(existingQuestion);
+        return existingQuestion;
     }
 
     @GetMapping

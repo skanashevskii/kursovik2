@@ -4,8 +4,10 @@ import com.example.kursovik2.repository.QuestionRepository;
 import com.example.kursovik2.service.MathQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class MathQuestionServiceTest {
     private MathQuestionService mathQuestionService;
 
@@ -24,7 +26,7 @@ class MathQuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+
         mathQuestionService = new MathQuestionService(questionRepository);
     }
 

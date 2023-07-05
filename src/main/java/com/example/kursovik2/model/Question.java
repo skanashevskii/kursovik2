@@ -22,9 +22,9 @@ public class Question {
         return answer;
     }
 
-  /*  public String question(){
+    public String question(){
         return this.question + this.answer;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -41,9 +41,9 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question{" +
-                "question='" + question + '\'' +
-                ", answer='" + answer + '\'' +
+        return "{" +
+                "Вопрос='" + question +
+                ", Ответ='" + answer  +
                 '}';
     }
 }

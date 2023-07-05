@@ -6,8 +6,10 @@ import com.example.kursovik2.service.JavaQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -15,7 +17,7 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+@ExtendWith(MockitoExtension.class)
 class JavaQuestionServiceTest {
     private JavaQuestionService javaQuestionService;
 
@@ -24,7 +26,7 @@ class JavaQuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+
         javaQuestionService = new JavaQuestionService(questionRepository);
     }
 
